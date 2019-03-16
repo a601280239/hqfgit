@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.2.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+		
+		<!-- 扫描指定包 -->
+		<context:component-scan base-package="com.bwie.controller">
+			<!-- 扫描包里指定注解类型 -->
+			<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		</context:component-scan>
+		
+		
+		<!-- 配置mvc注解驱动：
+		   支持自定义类型 参数绑定：    "2012/12/12"  Date  
+		  支持 springmvc json格式 响应会浏览器
+		  -->
+		<mvc:annotation-driven validator="localValidatorFactoryBean">
+			<!--fastjson解析器 -->
+			<!--  <mvc:message-converters>
+				<bean
+					class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>application/json</value>
+						</list>
+					</property>
+				</bean>
+			</mvc:message-converters>  -->
+		</mvc:annotation-driven>
+		
+		
+		<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+			<property name="prefix">
+				<value>/jsp/</value>
+			</property>
+			
+			<property name="suffix">
+				<value>.jsp</value>
+			</property>
+		</bean>
+	
+		<!-- 配置 校验器  -->
+		<bean id="localValidatorFactoryBean" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+			<!-- 配置 具体的校验器对象 -->
+			<property name="providerClass">
+				<value>org.hibernate.validator.HibernateValidator</value>
+			</property>
+		<!-- 	
+			 如果 需要将 验证的提示信息  单独的放在一个配置文件中 需要以下配置 
+		<property name="validationMessageSource" ref="messageSource">
+			</property> -->
+		</bean>	
+			<!-- 静态资源 -->
+		<mvc:default-servlet-handler />
+				<!--配置拦截器 -->
+<!-- <mvc:interceptors>
+<mvc:interceptor>
+拦截所有的路径
+<mvc:mapping path="/**" />
+不被过滤的路径
+ <mvc:exclude-mapping path="/js/**"/>
+            <mvc:exclude-mapping path="/css/**"/>
+            <mvc:exclude-mapping path="/images/**"/>
+<bean class="com.bwie.interceptor.LoginInterceptor"></bean>
+</mvc:interceptor>
+</mvc:interceptors>
+ -->
+		
+		
+</beans>
